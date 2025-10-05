@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <!-- 功能区域添加虚线边框 -->
-    <div class="bg-white rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
-      <h2 class="text-3xl font-bold text-gray-900 mb-6">图片格式转换</h2>
+    <div class="rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
+      <h2 class="text-3xl font-bold text-purple-900 mb-6">图片格式转换</h2>
 
       <!-- 上传区域 -->
       <div @drop="handleDrop" @dragover.prevent @dragenter.prevent
-        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-indigo-500 transition-colors">
+        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-violet-500 transition-colors">
         <div class="space-y-4">
           <div class="mx-auto h-12 w-12 text-gray-400">
             <svg fill="none" stroke="currentColor" viewBox="0 0 48 48">
@@ -18,7 +18,7 @@
           <div>
             <p class="text-lg text-gray-600">拖拽图片到这里，或者</p>
             <label for="convert-file-input"
-              class="mt-2 inline-block cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+              class="mt-2 inline-block cursor-pointer bg-violet-500 text-white px-4 py-2 rounded-md hover:bg-violet-600 transition-colors">
               选择文件
             </label>
             <input id="convert-file-input" ref="fileInput" type="file" multiple accept="image/*"
@@ -32,12 +32,12 @@
     <!-- 转换设置 -->
     <div v-if="selectedImages.length > 0"
       class="mb-8 p-4 border border-dashed border-green-200 rounded-lg bg-green-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">转换设置</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">转换设置</h3>
       <div class="flex flex-col md:flex-row gap-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">目标格式</label>
           <select v-model="targetFormat"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500">
             <option value="png">PNG</option>
             <option value="jpeg">JPEG</option>
             <option value="webp">WebP</option>
@@ -61,14 +61,14 @@
     <!-- 图片列表 -->
     <div v-if="selectedImages.length > 0"
       class="mb-8 p-4 border border-dashed border-purple-200 rounded-lg bg-purple-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">图片列表</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">图片列表</h3>
       <div class="space-y-4">
         <div v-for="(image, index) in selectedImages" :key="index"
           class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
           <div class="flex items-center space-x-4">
             <img :src="image.original" :alt="image.name" class="w-16 h-16 object-cover rounded-md" />
             <div>
-              <p class="font-medium text-gray-900">{{ image.name }}</p>
+              <p class="font-medium text-purple-900">{{ image.name }}</p>
               <p class="text-sm text-gray-500">
                 {{ getFileFormat(image.file.type) }} → {{ targetFormat.toUpperCase() }}
               </p>
@@ -93,7 +93,7 @@
     <div v-if="selectedImages.length > 0"
       class="flex justify-center space-x-4 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
       <button @click="convertImages" :disabled="isConverting"
-        class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+        class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
         {{ isConverting ? '转换中...' : '开始转换' }}
       </button>
       <button @click="downloadAll" :disabled="convertedImages.filter(Boolean).length === 0"

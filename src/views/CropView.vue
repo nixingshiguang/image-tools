@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <!-- 功能区域添加虚线边框 -->
-    <div class="bg-white rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
-      <h2 class="text-3xl font-bold text-gray-900 mb-6">图片裁剪</h2>
+    <div class="rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
+      <h2 class="text-3xl font-bold text-purple-900 mb-6">图片裁剪</h2>
 
       <!-- 上传区域 -->
       <div @drop="handleDrop" @dragover.prevent @dragenter.prevent
-        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-indigo-500 transition-colors">
+        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-violet-500 transition-colors">
         <div class="space-y-4">
           <div class="mx-auto h-12 w-12 text-gray-400">
             <svg fill="none" stroke="currentColor" viewBox="0 0 48 48">
@@ -18,7 +18,7 @@
           <div>
             <p class="text-lg text-gray-600">拖拽图片到这里，或者</p>
             <label for="crop-file-input"
-              class="mt-2 inline-block cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+              class="mt-2 inline-block cursor-pointer bg-violet-500 text-white px-4 py-2 rounded-md hover:bg-violet-600 transition-colors">
               选择文件
             </label>
             <input id="crop-file-input" ref="fileInput" type="file" accept="image/*" @change="handleFileSelect"
@@ -31,17 +31,17 @@
 
     <!-- 裁剪设置 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-green-200 rounded-lg bg-green-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">裁剪设置</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">裁剪设置</h3>
       <div class="flex flex-col md:flex-row gap-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">目标宽度 (px)</label>
           <input v-model.number="targetWidth" type="number" min="1"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500" />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">目标高度 (px)</label>
           <input v-model.number="targetHeight" type="number" min="1"
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500" />
         </div>
       </div>
       <div class="mt-4 flex items-center space-x-4">
@@ -66,7 +66,7 @@
 
     <!-- 图片预览和裁剪 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-purple-200 rounded-lg bg-purple-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">图片预览</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">图片预览</h3>
       <div class="flex flex-col lg:flex-row gap-6">
         <div class="text-center">
           <p class="text-sm font-medium text-gray-700 mb-2">原图</p>
@@ -91,7 +91,7 @@
     <div v-if="selectedImage"
       class="flex justify-center space-x-4 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
       <button @click="cropImage"
-        class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+        class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition-colors">
         裁剪图片
       </button>
       <button @click="downloadCropped" :disabled="!croppedImage"

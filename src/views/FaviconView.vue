@@ -1,12 +1,12 @@
 <template>
   <div class="container mx-auto px-4 py-8">
     <!-- 功能区域添加虚线边框 -->
-    <div class="bg-white rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
-      <h2 class="text-3xl font-bold text-gray-900 mb-6">Favicon生成器</h2>
+    <div class="rounded-lg shadow-lg p-6 border-2 border-dashed border-gray-300">
+      <h2 class="text-3xl font-bold text-purple-900 mb-6">Favicon生成器</h2>
 
       <!-- 上传区域 -->
       <div @drop="handleDrop" @dragover.prevent @dragenter.prevent
-        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-indigo-500 transition-colors">
+        class="mb-8 p-8 border-2 border-dashed border-blue-300 rounded-lg bg-blue-50/30 text-center hover:border-violet-500 transition-colors">
         <div class="space-y-4">
           <div class="mx-auto h-12 w-12 text-gray-400">
             <svg fill="none" stroke="currentColor" viewBox="0 0 48 48">
@@ -18,7 +18,7 @@
           <div>
             <p class="text-lg text-gray-600">拖拽图片到这里，或者</p>
             <label for="favicon-file-input"
-              class="mt-2 inline-block cursor-pointer bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+              class="mt-2 inline-block cursor-pointer bg-violet-500 text-white px-4 py-2 rounded-md hover:bg-violet-600 transition-colors">
               选择文件
             </label>
             <input id="favicon-file-input" ref="fileInput" type="file" accept="image/*" @change="handleFileSelect"
@@ -31,7 +31,7 @@
 
     <!-- 原图预览 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-green-200 rounded-lg bg-green-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">原图预览</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">原图预览</h3>
       <div class="text-center">
         <img ref="originalImage" :src="selectedImage.original" :alt="selectedImage.name"
           class="max-w-xs max-h-64 object-contain rounded-md mx-auto border" @load="onImageLoad" />
@@ -42,7 +42,7 @@
 
     <!-- Favicon尺寸预览 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-purple-200 rounded-lg bg-purple-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">Favicon尺寸预览</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">Favicon尺寸预览</h3>
       <div class="flex flex-wrap gap-6">
         <div v-for="size in faviconSizes" :key="size" class="text-center">
           <div class="bg-gray-100 rounded-lg p-4 mb-2">
@@ -58,7 +58,7 @@
 
     <!-- 生成选项 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-yellow-200 rounded-lg bg-yellow-50/30">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">生成选项</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">生成选项</h3>
       <div class="flex flex-col md:flex-row gap-6">
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">背景色 (透明图片转换时)</label>
@@ -79,7 +79,7 @@
     <div v-if="selectedImage"
       class="flex justify-center space-x-4 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
       <button @click="generateFavicons" :disabled="isGenerating"
-        class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+        class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
         {{ isGenerating ? '生成中...' : '生成 Favicon' }}
       </button>
       <button @click="downloadAll" :disabled="!generatedFavicons.length"
@@ -93,12 +93,12 @@
 
     <!-- HTML代码提示 -->
     <div v-if="generatedFavicons.length > 0" class="mt-8">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4">HTML代码</h3>
+      <h3 class="text-xl font-semibold text-purple-900 mb-4">HTML代码</h3>
       <div class="bg-gray-100 rounded-lg p-4">
         <p class="text-sm text-gray-600 mb-2">将以下代码添加到您的 HTML head 标签中：</p>
         <pre class="text-xs bg-white p-3 rounded border overflow-x-auto"><code>{{ htmlCode }}</code></pre>
         <button @click="copyToClipboard"
-          class="mt-2 text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700 transition-colors">
+          class="mt-2 text-sm bg-violet-500 text-white px-3 py-1 rounded hover:bg-violet-600 transition-colors">
           复制代码
         </button>
       </div>

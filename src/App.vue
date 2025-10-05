@@ -1,5 +1,5 @@
 <template>
-  <n-config-provider :theme="isDarkMode ? darkTheme : null" :theme-overrides="themeOverrides">
+  <n-config-provider :theme="lightTheme" :theme-overrides="themeOverrides">
     <n-message-provider>
       <n-layout class="layout-container">
         <!-- 顶部导航栏 -->
@@ -11,16 +11,7 @@
             <div class="nav-menu">
               <n-menu :value="activeKey" mode="horizontal" :options="menuOptions" @update:value="handleMenuUpdate" />
             </div>
-            <div class="theme-switch">
-              <n-switch v-model:value="isDarkMode" @update:value="toggleDarkMode">
-                <template #checked>
-                  <n-icon><div class="i-carbon-moon" /></n-icon>
-                </template>
-                <template #unchecked>
-                  <n-icon><div class="i-carbon-sun" /></n-icon>
-                </template>
-              </n-switch>
-            </div>
+
           </div>
         </n-layout-header>
 
@@ -34,7 +25,7 @@
         <!-- 页脚 -->
         <n-layout-footer bordered>
           <div class="footer-content">
-            <n-text depth="3">© 2023 图片处理工具 - 现代化图片编辑解决方案</n-text>
+            <n-text depth="3">© 2025 逆行时光</n-text>
           </div>
         </n-layout-footer>
       </n-layout>
@@ -43,14 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, h } from 'vue'
+import { computed, h } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
-import { 
-  NConfigProvider, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter, 
-  NMenu, NCard, NSwitch, NGradientText, NMessageProvider, NIcon, NText
+import {
+  NConfigProvider, NLayout, NLayoutHeader, NLayoutContent, NLayoutFooter,
+  NMenu, NCard, NGradientText, NMessageProvider, NText
 } from 'naive-ui'
-import { darkTheme, lightTheme } from 'naive-ui'
-import { useStorage, usePreferredDark } from '@vueuse/core'
+import { lightTheme } from 'naive-ui'
 
 // 路由相关
 const route = useRoute()
@@ -62,21 +52,15 @@ function handleMenuUpdate(key: string) {
   router.push(key)
 }
 
-// 系统主题偏好
-const prefersDark = usePreferredDark()
-
-// 暗黑模式切换
-const isDarkMode = useStorage('dark-mode', prefersDark.value)
-
-function toggleDarkMode(value) {
-  isDarkMode.value = value
-}
-
 // 主题覆盖配置
 const themeOverrides = computed(() => {
   return {
     common: {
-      bodyColor: isDarkMode.value ? '#111' : '#f5f5f5'
+      bodyColor: '#f5f5f5',
+      primaryColor: '#8b5cf6',
+      primaryColorHover: '#7c3aed',
+      primaryColorPressed: '#6d28d9',
+      primaryColorSuppl: '#a78bfa'
     }
   }
 })
@@ -101,7 +85,7 @@ const menuOptions = [
   {
     label: 'Favicon生成',
     key: '/favicon',
-    icon: () => h('div', { class: 'i-carbon-logo-apple' })
+    icon: () => h('div', { class: 'i-carbon-favorite' })
   }
 ]
 </script>
@@ -136,9 +120,7 @@ const menuOptions = [
   justify-content: center;
 }
 
-.theme-switch {
-  margin-left: 16px;
-}
+
 
 .content-container {
   padding: 32px;
@@ -164,11 +146,11 @@ const menuOptions = [
     height: auto;
     padding: 12px;
   }
-  
+
   .nav-menu {
     margin: 12px 0;
   }
-  
+
   .content-container {
     padding: 16px;
   }
