@@ -1,0 +1,66 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景圆形 -->
+  <circle cx="60" cy="60" r="55" fill="url(#gradient1)" stroke="url(#gradient2)" stroke-width="2"/>
+  
+  <!-- 主图标 - 图片框架 -->
+  <rect x="25" y="30" width="70" height="50" rx="8" ry="8" fill="none" stroke="white" stroke-width="3"/>
+  
+  <!-- 图片内容 - 山峰 -->
+  <path d="M30 65 L40 50 L50 60 L65 45 L80 55 L90 50 L90 75 L30 75 Z" fill="white" opacity="0.9"/>
+  
+  <!-- 太阳 -->
+  <circle cx="75" cy="42" r="6" fill="white" opacity="0.8"/>
+  
+  <!-- 工具图标组 -->
+  <!-- 裁剪工具 -->
+  <g transform="translate(20, 85)">
+    <rect x="0" y="0" width="12" height="12" fill="none" stroke="white" stroke-width="2" stroke-dasharray="2,2"/>
+    <circle cx="6" cy="6" r="1.5" fill="white"/>
+  </g>
+  
+  <!-- 圆角工具 -->
+  <g transform="translate(40, 85)">
+    <rect x="0" y="0" width="12" height="12" rx="4" ry="4" fill="none" stroke="white" stroke-width="2"/>
+    <circle cx="6" cy="6" r="1.5" fill="white"/>
+  </g>
+  
+  <!-- 转换工具 -->
+  <g transform="translate(60, 85)">
+    <path d="M2 6 L10 6 M8 4 L10 6 L8 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M10 6 L2 6 M4 4 L2 6 L4 8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Favicon工具 -->
+  <g transform="translate(80, 85)">
+    <rect x="0" y="0" width="12" height="12" rx="2" ry="2" fill="none" stroke="white" stroke-width="2"/>
+    <rect x="3" y="3" width="6" height="6" rx="1" ry="1" fill="white"/>
+  </g>
+  
+  <!-- 渐变定义 -->
+  <defs>
+    <!-- 主背景渐变 -->
+    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6d28d9;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 边框渐变 -->
+    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- 发光效果 -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- 外层发光效果 -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="url(#gradient1)" stroke-width="1" opacity="0.3" filter="url(#glow)"/>
+</svg>
