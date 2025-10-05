@@ -44,7 +44,7 @@
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500" />
         </div>
       </div>
-      <div class="mt-4 flex items-center space-x-4">
+      <div class="mt-4 flex flex-wrap items-center gap-2">
         <button @click="setCommonSize('1:1')"
           class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
           1:1 正方形
@@ -53,13 +53,25 @@
           class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
           4:3
         </button>
+        <button @click="setCommonSize('3:2')"
+          class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+          3:2
+        </button>
         <button @click="setCommonSize('16:9')"
           class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
           16:9
         </button>
+        <button @click="setCommonSize('2:3')"
+          class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+          2:3 竖屏
+        </button>
         <button @click="setCommonSize('3:4')"
           class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
           3:4 竖屏
+        </button>
+        <button @click="setCommonSize('9:16')"
+          class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors">
+          9:16 竖屏
         </button>
       </div>
     </div>
@@ -171,6 +183,8 @@ const onImageLoad = () => {
 
 const setCommonSize = (ratio: string) => {
   const baseSize = Math.min(originalDimensions.value.width, originalDimensions.value.height)
+  const maxWidth = originalDimensions.value.width
+  const maxHeight = originalDimensions.value.height
 
   switch (ratio) {
     case '1:1':
@@ -178,16 +192,28 @@ const setCommonSize = (ratio: string) => {
       targetHeight.value = baseSize
       break
     case '4:3':
-      targetWidth.value = Math.min(baseSize, Math.floor(baseSize * 4 / 3))
+      targetWidth.value = Math.min(maxWidth, Math.floor(baseSize * 4 / 3))
       targetHeight.value = Math.floor(targetWidth.value * 3 / 4)
       break
+    case '3:2':
+      targetWidth.value = Math.min(maxWidth, Math.floor(baseSize * 3 / 2))
+      targetHeight.value = Math.floor(targetWidth.value * 2 / 3)
+      break
     case '16:9':
-      targetWidth.value = Math.min(originalDimensions.value.width, Math.floor(baseSize * 16 / 9))
+      targetWidth.value = Math.min(maxWidth, Math.floor(baseSize * 16 / 9))
       targetHeight.value = Math.floor(targetWidth.value * 9 / 16)
       break
+    case '2:3':
+      targetHeight.value = Math.min(maxHeight, Math.floor(baseSize * 3 / 2))
+      targetWidth.value = Math.floor(targetHeight.value * 2 / 3)
+      break
     case '3:4':
-      targetHeight.value = Math.min(originalDimensions.value.height, Math.floor(baseSize * 4 / 3))
+      targetHeight.value = Math.min(maxHeight, Math.floor(baseSize * 4 / 3))
       targetWidth.value = Math.floor(targetHeight.value * 3 / 4)
+      break
+    case '9:16':
+      targetHeight.value = Math.min(maxHeight, Math.floor(baseSize * 16 / 9))
+      targetWidth.value = Math.floor(targetHeight.value * 9 / 16)
       break
   }
 }

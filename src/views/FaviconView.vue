@@ -59,18 +59,46 @@
     <!-- 生成选项 -->
     <div v-if="selectedImage" class="mb-8 p-4 border border-dashed border-yellow-200 rounded-lg bg-yellow-50/30">
       <h3 class="text-xl font-semibold text-purple-900 mb-4">生成选项</h3>
-      <div class="flex flex-col md:flex-row gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">背景色 (透明图片转换时)</label>
-          <input v-model="backgroundColor" type="color"
-            class="w-full h-10 border border-gray-300 rounded-md cursor-pointer" />
+      <div class="flex flex-col gap-6">
+        <div class="flex flex-col md:flex-row gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">背景色 (透明图片转换时)</label>
+            <input v-model="backgroundColor" type="color"
+              class="w-full h-10 border border-gray-300 rounded-md cursor-pointer" />
+          </div>
+          <div>
+            <label class="flex items-center space-x-2 text-sm font-medium text-gray-700">
+              <input v-model="generateIco" type="checkbox" class="rounded" />
+              <span>生成 .ico 文件</span>
+            </label>
+            <p class="text-xs text-gray-500 mt-1">包含多个尺寸的传统 favicon 格式</p>
+          </div>
         </div>
-        <div>
-          <label class="flex items-center space-x-2 text-sm font-medium text-gray-700">
-            <input v-model="generateIco" type="checkbox" class="rounded" />
-            <span>生成 .ico 文件</span>
-          </label>
-          <p class="text-xs text-gray-500 mt-1">包含多个尺寸的传统 favicon 格式</p>
+
+        <!-- 路径设置 -->
+        <div class="border-t pt-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">图标文件路径</label>
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+              <input v-model="faviconPath" type="text" placeholder="例如: /assets/icons/ 或 /images/favicons/"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500" />
+              <p class="text-xs text-gray-500 mt-1">设置图标文件在网站中的存放路径，以 / 开头和结尾</p>
+            </div>
+            <div class="flex gap-2">
+              <button @click="setCommonPath('/')"
+                class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                根目录
+              </button>
+              <button @click="setCommonPath('/assets/icons/')"
+                class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                /assets/icons/
+              </button>
+              <button @click="setCommonPath('/images/favicons/')"
+                class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors">
+                /images/favicons/
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -126,6 +154,7 @@ const isGenerating = ref(false)
 const generatedFavicons = ref<{ size: number; dataUrl: string }[]>([])
 const originalDimensions = ref({ width: 0, height: 0 })
 const canvasRefs = ref<Record<number, HTMLCanvasElement>>({})
+const faviconPath = ref('/')
 
 // 常用的 Favicon 尺寸
 const faviconSizes = [16, 32, 48, 64, 96, 128, 152, 167, 180, 192, 256, 512]
@@ -187,6 +216,24 @@ const getFaviconType = (size: number): string => {
     512: 'PWA'
   }
   return typeMap[size] || 'Custom'
+}
+
+const setCommonPath = (path: string) => {
+  faviconPath.value = path
+}
+
+const formatPath = (filename: string): string => {
+  const path = faviconPath.value.trim()
+  if (!path) return filename
+
+  // 确保路径以 / 开头
+  const normalizedPath = path.startsWith('/') ? path : '/' + path
+
+  // 确保路径以 / 结尾（除非是根目录）
+  const finalPath = normalizedPath === '/' ? '/' :
+    (normalizedPath.endsWith('/') ? normalizedPath : normalizedPath + '/')
+
+  return finalPath + filename
 }
 
 const generateFavicons = async () => {
@@ -262,7 +309,7 @@ const downloadAll = async () => {
     name: 'My App',
     short_name: 'App',
     icons: generatedFavicons.value.map(({ size }) => ({
-      src: `favicon-${size}x${size}.png`,
+      src: formatPath(`favicon-${size}x${size}.png`),
       sizes: `${size}x${size}`,
       type: 'image/png'
     }))
@@ -278,16 +325,16 @@ const htmlCode = computed(() => {
 
   const lines = [
     '<!-- Favicon -->',
-    '<link rel="icon" type="image/x-icon" href="/favicon.ico">',
-    '<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">',
-    '<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">',
-    '<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180x180.png">',
-    '<link rel="manifest" href="/manifest.json">',
+    `<link rel="icon" type="image/x-icon" href="${formatPath('favicon.ico')}">`,
+    `<link rel="icon" type="image/png" sizes="32x32" href="${formatPath('favicon-32x32.png')}">`,
+    `<link rel="icon" type="image/png" sizes="16x16" href="${formatPath('favicon-16x16.png')}">`,
+    `<link rel="apple-touch-icon" sizes="180x180" href="${formatPath('favicon-180x180.png')}">`,
+    `<link rel="manifest" href="${formatPath('manifest.json')}">`,
     '',
     '<!-- Additional sizes -->',
     ...generatedFavicons.value
       .filter(f => ![16, 32, 180].includes(f.size))
-      .map(({ size }) => `<link rel="icon" type="image/png" sizes="${size}x${size}" href="/favicon-${size}x${size}.png">`)
+      .map(({ size }) => `<link rel="icon" type="image/png" sizes="${size}x${size}" href="${formatPath(`favicon-${size}x${size}.png`)}">`)
   ]
 
   return lines.join('\n')
