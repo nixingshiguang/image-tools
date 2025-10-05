@@ -1,6 +1,6 @@
 {
-  "name": "image-to-radius",
-  "version": "0.0.0",
+  "name": "image-tools",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
