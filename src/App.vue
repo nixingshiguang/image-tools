@@ -83,6 +83,11 @@ const menuOptions = [
     icon: () => h('div', { class: 'i-carbon-repeat' })
   },
   {
+    label: '图片压缩',
+    key: '/compress',
+    icon: () => h('div', { class: 'i-carbon-compress' })
+  },
+  {
     label: 'Favicon生成',
     key: '/favicon',
     icon: () => h('div', { class: 'i-carbon-favorite' })

@@ -20,6 +20,11 @@ const router = createRouter({
       component: () => import('../views/ConvertView.vue'),
     },
     {
+      path: '/compress',
+      name: 'compress',
+      component: () => import('../views/CompressView.vue'),
+    },
+    {
       path: '/favicon',
       name: 'favicon',
       component: () => import('../views/FaviconView.vue'),
