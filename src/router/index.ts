@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/CropView.vue'),
     },
     {
+      path: '/height-crop',
+      name: 'height-crop',
+      component: () => import('../views/HeightCropView.vue'),
+    },
+    {
       path: '/convert',
       name: 'convert',
       component: () => import('../views/ConvertView.vue'),

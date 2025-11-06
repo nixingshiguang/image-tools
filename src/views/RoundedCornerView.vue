@@ -70,19 +70,47 @@
 
       <!-- 批量操作按钮 -->
       <div v-if="selectedImages.length > 0"
-        class="flex justify-center space-x-4 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
-        <button @click="processImages"
-          class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition-colors">
-          处理图片
-        </button>
-        <button @click="downloadAll" :disabled="!processedImages.length"
-          class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
-          下载全部
-        </button>
-        <button @click="clearImages"
-          class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors">
-          清空
-        </button>
+        class="p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
+        <div class="flex flex-col space-y-4">
+          <div class="flex justify-center space-x-4">
+            <button @click="processImages"
+              class="bg-violet-500 text-white px-6 py-2 rounded-md hover:bg-violet-600 transition-colors">
+              处理图片
+            </button>
+            <button @click="clearImages"
+              class="bg-red-600 text-white px-6 py-2 rounded-md hover:bg-red-700 transition-colors">
+              清空
+            </button>
+          </div>
+          
+          <!-- 下载选项 -->
+          <div v-if="processedImages.filter(Boolean).length > 0" class="border-t pt-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div class="flex items-center space-x-4">
+                <span class="text-sm font-medium text-gray-700">下载方式：</span>
+                <div class="flex space-x-2">
+                  <label class="inline-flex items-center">
+                    <input v-model="downloadMode" type="radio" value="single" class="mr-2" />
+                    <span class="text-sm">单张下载</span>
+                  </label>
+                  <label class="inline-flex items-center">
+                    <input v-model="downloadMode" type="radio" value="zip" class="mr-2" />
+                    <span class="text-sm">打包下载</span>
+                  </label>
+                </div>
+              </div>
+              
+              <button @click="handleDownload" :disabled="processedImages.filter(Boolean).length === 0"
+                class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
+                {{ downloadMode === 'single' ? '下载全部单张' : '打包下载全部' }}
+              </button>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">
+              单张下载：{{ processedImages.filter(Boolean).length }} 张图片分别下载 \
+              打包下载：所有图片压缩为一个 zip 文件
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -104,6 +132,39 @@ const selectedImages = ref<ImageData[]>([])
 const processedImages = ref<string[]>([])
 const borderRadius = ref(20)
 const canvasRefs = ref<HTMLCanvasElement[]>([])
+const downloadMode = ref<'single' | 'zip'>('zip') // 默认打包下载
+
+const handleDownload = async () => {
+  const validImages = processedImages.value.filter(Boolean)
+  if (validImages.length === 0) return
+
+  if (downloadMode.value === 'single') {
+    // 单张下载：分别下载每张图片
+    processedImages.value.forEach((_, index) => {
+      // 添加延迟以避免浏览器同时下载过多文件
+      setTimeout(() => {
+        downloadSingle(index)
+      }, index * 300)
+    })
+  } else {
+    // 打包下载
+    const zip = new JSZip()
+
+    processedImages.value.forEach((dataUrl, index) => {
+      const image = selectedImages.value[index]
+      if (dataUrl && image) {
+        const base64Data = dataUrl.split(',')[1]
+        const fileName = `rounded_${image.name.split('.')[0]}.png`
+        if (base64Data) {
+          zip.file(fileName, base64Data, { base64: true })
+        }
+      }
+    })
+
+    const content = await zip.generateAsync({ type: 'blob' })
+    saveAs(content, 'rounded_images.zip')
+  }
+}
 
 const handleFileSelect = (event: Event) => {
   const target = event.target as HTMLInputElement

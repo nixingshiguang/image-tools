@@ -73,9 +73,14 @@ const menuOptions = [
     icon: () => h('div', { class: 'i-carbon-image' })
   },
   {
-    label: '图片裁剪',
+    label: '比例裁剪',
     key: '/crop',
     icon: () => h('div', { class: 'i-carbon-crop' })
+  },
+  {
+    label: '等高裁剪',
+    key: '/height-crop',
+    icon: () => h('div', { class: 'i-carbon-split-screen' })
   },
   {
     label: '格式转换',
