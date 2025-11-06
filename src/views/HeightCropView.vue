@@ -52,7 +52,7 @@
           </select>
         </div>
       </div>
-      
+
       <!-- 等分模式设置 -->
       <div v-if="cropMode === 'equal'" class="mt-4">
         <label class="block text-sm font-medium text-gray-700 mb-2">高度等分数</label>
@@ -64,8 +64,9 @@
           <option value="5">5 等分</option>
           <option value="6">6 等分</option>
         </select>
-        <p class="text-xs text-gray-500 mt-1">将图片高度分成 {{ cropCount }} 等份，每份高度: {{ Math.floor(originalDimensions.height / cropCount) }}px</p>
-        
+        <p class="text-xs text-gray-500 mt-1">将图片高度分成 {{ cropCount }} 等份，每份高度: {{ Math.floor(originalDimensions.height /
+          cropCount) }}px</p>
+
         <!-- 等分详细参考信息 -->
         <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
           <p class="text-sm text-blue-800 font-medium mb-2">等分详细分析:</p>
@@ -83,11 +84,11 @@
           </div>
         </div>
       </div>
-      
+
       <!-- 自定义高度模式设置 -->
       <div v-if="cropMode === 'custom'" class="mt-4">
         <label class="block text-sm font-medium text-gray-700 mb-2">自定义高度设置</label>
-        
+
         <!-- 均分参考信息 -->
         <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
           <p class="text-sm text-yellow-800 font-medium mb-2">均分参考值（方便微调）:</p>
@@ -100,7 +101,7 @@
             <div class="bg-yellow-100 px-2 py-1 rounded">8等分: {{ Math.floor(originalDimensions.height / 8) }}px</div>
           </div>
         </div>
-        
+
         <div class="space-y-3">
           <div v-for="(height, index) in customHeights" :key="index" class="flex items-center gap-3">
             <span class="text-sm font-medium text-gray-600 w-8">第{{ index + 1 }}部分</span>
@@ -117,7 +118,7 @@
             + 添加部分
           </button>
           <div class="text-sm text-gray-600">
-            <p>当前总高度: {{ customHeights.reduce((sum, h) => sum + h, 0) }}px</p>
+            <p>当前总高度: {{customHeights.reduce((sum, h) => sum + (h || 0), 0)}}px</p>
             <p :class="['mt-1', totalHeightStatus === 'ok' ? 'text-green-600' : 'text-red-600']">
               {{ heightStatusMessage }}
             </p>
@@ -169,18 +170,18 @@
     </div>
 
     <!-- 裁剪结果 -->
-    <div v-if="croppedParts.length > 0" class="mb-8 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
+    <div v-if="croppedParts.length > 0"
+      class="mb-8 p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
       <h3 class="text-xl font-semibold text-purple-900 mb-4">裁剪结果</h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div v-for="(part, index) in croppedParts" :key="index"
           class="border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
           <div class="text-center">
-            <img :src="part.dataUrl" :alt="`裁剪部分 ${index + 1}`"
-              class="w-full h-32 object-contain rounded mb-2" />
+            <img :src="part.dataUrl" :alt="`裁剪部分 ${index + 1}`" class="w-full h-32 object-contain rounded mb-2" />
             <p class="text-sm font-medium text-gray-700">{{ part.name }}</p>
             <p class="text-xs text-gray-500">{{ part.width }} × {{ part.height }} px</p>
             <p class="text-xs text-gray-400">{{ formatFileSize(part.size) }}</p>
-            <button @click="downloadSingle(index)" 
+            <button @click="downloadSingle(index)"
               class="mt-2 text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors">
               下载单张
             </button>
@@ -195,8 +196,7 @@
     </div>
 
     <!-- 操作按钮 -->
-    <div v-if="selectedImage"
-      class="p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
+    <div v-if="selectedImage" class="p-4 border border-dashed border-orange-200 rounded-lg bg-orange-50/30">
       <div class="flex flex-col space-y-4">
         <div class="flex justify-center space-x-4">
           <button @click="cropImage" :disabled="isCropping"
@@ -208,7 +208,7 @@
             清空
           </button>
         </div>
-        
+
         <!-- 下载选项 -->
         <div v-if="croppedParts.length > 0" class="border-t pt-4">
           <div class="flex flex-col md:flex-row items-center justify-between gap-4">
@@ -225,7 +225,7 @@
                 </label>
               </div>
             </div>
-            
+
             <button @click="handleDownload" :disabled="croppedParts.length === 0"
               class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors">
               {{ downloadMode === 'single' ? '下载全部单张' : '打包下载全部' }}
@@ -242,7 +242,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, nextTick, watch, computed } from 'vue'
+import { ref, nextTick, watch, computed, type ComponentPublicInstance } from 'vue'
 import { saveAs } from 'file-saver'
 import JSZip from 'jszip'
 
@@ -283,7 +283,7 @@ const downloadMode = ref<'single' | 'zip'>('zip') // 默认打包下载
 const downloadSingle = (index: number) => {
   const part = croppedParts.value[index]
   if (!part) return
-  
+
   const link = document.createElement('a')
   link.download = part.name
   link.href = part.dataUrl
@@ -385,34 +385,7 @@ const getFileExtension = (mimeType: string): string => {
   return extensionMap[mimeType] || 'jpg'
 }
 
-const downloadAll = async () => {
-  if (croppedParts.value.length === 0) return
 
-  if (croppedParts.value.length === 1) {
-    // 单个文件直接下载
-    const firstPart = croppedParts.value[0]
-    if (!firstPart) return
-    
-    const link = document.createElement('a')
-    link.download = firstPart.name
-    link.href = firstPart.dataUrl
-    link.click()
-  } else {
-    // 多个文件打包下载
-    const zip = new JSZip()
-
-    croppedParts.value.forEach((part) => {
-      if (!part) return
-      const base64Data = part.dataUrl.split(',')[1]
-      if (base64Data) {
-        zip.file(part.name, base64Data, { base64: true })
-      }
-    })
-
-    const content = await zip.generateAsync({ type: 'blob' })
-    saveAs(content, `${selectedImage.value?.name.split('.')[0] || 'height_cropped'}_parts.zip`)
-  }
-}
 
 const clearImage = () => {
   selectedImage.value = null
@@ -421,9 +394,9 @@ const clearImage = () => {
   originalDimensions.value = { width: 0, height: 0 }
 }
 
-const setPreviewCanvas = (el: HTMLCanvasElement | null, index: number) => {
-  if (el) {
-    previewCanvases.value[index] = el
+const setPreviewCanvas = (el: Element | ComponentPublicInstance | null, index: number) => {
+  if (el && 'tagName' in el && el.tagName === 'CANVAS') {
+    previewCanvases.value[index] = el as HTMLCanvasElement
   }
 }
 
@@ -431,14 +404,14 @@ const updatePreviewImages = () => {
   if (!selectedImage.value || !originalImage.value) return
 
   const img = originalImage.value
-  
+
   if (cropMode.value === 'equal') {
     // 等分模式
     const partHeight = Math.floor(img.naturalHeight / cropCount.value)
-    
+
     previewCanvases.value.forEach((canvas, index) => {
       if (!canvas || index >= cropCount.value) return
-      
+
       const ctx = canvas.getContext('2d')
       if (!ctx) return
 
@@ -454,23 +427,24 @@ const updatePreviewImages = () => {
 
       // 清除画布
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
+
       // 绘制预览图像
       ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height)
     })
   } else if (cropMode.value === 'custom') {
     // 自定义高度模式
     let currentY = 0
-    
+
     previewCanvases.value.forEach((canvas, index) => {
       if (!canvas || index >= customHeights.value.length) return
-      
+
       const ctx = canvas.getContext('2d')
       if (!ctx) return
 
       // 获取当前部分的高度
-      const height = Math.min(customHeights.value[index], img.naturalHeight - currentY)
-      
+      const heightValue = customHeights.value[index] || 0
+      const height = Math.min(heightValue, img.naturalHeight - currentY)
+
       // 设置画布尺寸
       canvas.width = img.naturalWidth
       canvas.height = height
@@ -483,10 +457,10 @@ const updatePreviewImages = () => {
 
       // 清除画布
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      
+
       // 绘制预览图像
       ctx.drawImage(img, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, canvas.width, canvas.height)
-      
+
       // 更新当前位置
       currentY += height
     })
@@ -525,7 +499,7 @@ const removeCustomHeight = (index: number) => {
 
 // 计算总高度状态
 const totalHeightStatus = computed(() => {
-  const totalHeight = customHeights.value.reduce((sum, h) => sum + h, 0)
+  const totalHeight = customHeights.value.reduce((sum, h) => sum + (h || 0), 0)
   if (totalHeight > originalDimensions.value.height) {
     return 'exceed'
   } else if (totalHeight < originalDimensions.value.height) {
@@ -536,9 +510,9 @@ const totalHeightStatus = computed(() => {
 })
 
 const heightStatusMessage = computed(() => {
-  const totalHeight = customHeights.value.reduce((sum, h) => sum + h, 0)
+  const totalHeight = customHeights.value.reduce((sum, h) => sum + (h || 0), 0)
   const diff = Math.abs(totalHeight - originalDimensions.value.height)
-  
+
   if (totalHeightStatus.value === 'exceed') {
     return `总高度超出原图 ${diff}px，裁剪将只保留原图范围内的部分`
   } else if (totalHeightStatus.value === 'less') {
@@ -576,7 +550,7 @@ watch(customHeights, () => {
 // 修改预览更新函数以支持自定义高度
 const updatePreviewParts = () => {
   cropPreviewParts.value = []
-  
+
   if (cropMode.value === 'equal') {
     const partHeight = Math.floor(originalDimensions.value.height / cropCount.value)
     for (let i = 0; i < cropCount.value; i++) {
@@ -588,10 +562,11 @@ const updatePreviewParts = () => {
   } else if (cropMode.value === 'custom') {
     let currentY = 0
     for (let i = 0; i < customHeights.value.length; i++) {
-      const height = customHeights.value[i]
+      const heightValue = customHeights.value[i] || 0
+      const height = Math.min(heightValue, originalDimensions.value.height - currentY)
       cropPreviewParts.value.push({
         width: originalDimensions.value.width,
-        height: Math.min(height, originalDimensions.value.height - currentY)
+        height: height
       })
       currentY += height
     }
@@ -610,9 +585,9 @@ const cropImage = async () => {
   await nextTick()
 
   const img = originalImage.value
-  
-  let parts: { startY: number; height: number }[] = []
-  
+
+  const parts: { startY: number; height: number }[] = []
+
   if (cropMode.value === 'equal') {
     const partHeight = Math.floor(img.naturalHeight / cropCount.value)
     for (let i = 0; i < cropCount.value; i++) {
@@ -621,17 +596,20 @@ const cropImage = async () => {
   } else if (cropMode.value === 'custom') {
     let currentY = 0
     for (let i = 0; i < customHeights.value.length; i++) {
-      const height = Math.min(customHeights.value[i], img.naturalHeight - currentY)
+      const heightValue = customHeights.value[i] || 0
+      const height = Math.min(heightValue, img.naturalHeight - currentY)
       parts.push({ startY: currentY, height: height })
       currentY += height
     }
   }
 
   for (let i = 0; i < parts.length; i++) {
-    const { startY, height } = parts[i]
+    const part = parts[i]
+    if (!part) continue
+    const { startY, height } = part
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
-    
+
     if (!ctx) continue
 
     // 设置画布尺寸
